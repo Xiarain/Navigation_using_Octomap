@@ -106,6 +106,9 @@ int main(int argc, char **argv)
     return 0;
 }
 
+Eigen::Matrix4f transform_pcl = Eigen::Matrix4f::Identity();
+pcl::PointCloud<pcl::PointXYZRGBA> pcl_cloud_transformed;
+
 void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const sensor_msgs::ImageConstPtr& msgD)
 {
     // Copy the ros image message to cv::Mat.
@@ -134,7 +137,22 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr& msgRGB,const senso
     Camerpose = mpSLAM->TrackRGBD(cv_ptrRGB->image,cv_ptrD->image,cv_ptrRGB->header.stamp.toSec());
 	
 	mpSLAM->ReturnPcl(pcl_cloud);
-	pcl::toROSMsg(pcl_cloud, pcl_point);
+
+    // pcl 变换坐标系
+
+    Eigen::Matrix3f euleranglemat;
+    euleranglemat = Eigen::AngleAxisf( 1.5*M_PI , Eigen::Vector3f::UnitX())
+                  * Eigen::AngleAxisf( 0 ,  Eigen::Vector3f::UnitY())
+                  * Eigen::AngleAxisf( 0 , Eigen::Vector3f::UnitZ());
+
+    transform_pcl.block(0,0,3,3) = euleranglemat;
+    transform_pcl(2,3) = 0.35;
+    pcl::transformPointCloud(pcl_cloud,pcl_cloud_transformed,transform_pcl); 
+	pcl::toROSMsg(pcl_cloud_transformed, pcl_point);
+
+    // need to configurate the pcl 
+
+    pcl_cloud.header.frame_id = "/map"; 
 	sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "32FC1", Camerpose).toImageMsg();
 	//利用cvbridge将Mat转为sensor_sensor_msgs
 	pclPoint_pub.publish(pcl_point);	

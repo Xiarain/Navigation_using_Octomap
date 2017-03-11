@@ -2,6 +2,7 @@
 #include<algorithm>
 #include<fstream>
 #include<chrono>
+#include<nav_msgs/Odometry.h>
 
 #include<ros/ros.h>
 #include <cv_bridge/cv_bridge.h>
@@ -22,8 +23,11 @@ std::vector<float> Pose_quat(4);
 std::vector<float> Pose_trans(3);
 tf::TransformBroadcaster * orb_slam_broadcaster;
 geometry_msgs::PoseStamped Cam_Pose;
+nav_msgs::Odometry odom;
 ros::Publisher CamPose_Pub;
 cv::Mat Camera_Pose;
+ros::Publisher odom_pub;  
+geometry_msgs::Quaternion odom_quat;
 
 void Pub_CamPose(cv::Mat &pose);
 
@@ -46,6 +50,7 @@ int main(int argc, char **argv)
 	image_transport::ImageTransport it(nh);
 	image_transport::Subscriber sub = it.subscribe("/camera/Tcw", 1, imageCallback);
 	CamPose_Pub = nh.advertise<geometry_msgs::PoseStamped>("/Camera_Pose",1);
+	odom_pub = nh.advertise<nav_msgs::Odometry>("/orb_slam/odom", 50);
     ros::Rate loop_rate(50);
 	
     while(ros::ok())
@@ -87,12 +92,30 @@ void Pub_CamPose(cv::Mat &pose)
 		
 		orb_slam.setOrigin(tf::Vector3(Pose_trans[2], -Pose_trans[0], -Pose_trans[1]));
 		orb_slam.setRotation(tf::Quaternion(Q.z(), -Q.x(), -Q.y(), Q.w()));
-		orb_slam_broadcaster->sendTransform(tf::StampedTransform(orb_slam, ros::Time::now(), "world", "base_link"));
+		orb_slam_broadcaster->sendTransform(tf::StampedTransform(orb_slam, ros::Time::now(), "map", "odom"));
 		
 		Cam_Pose.header.stamp = ros::Time::now();
 		Cam_Pose.header.frame_id = "orb_slam";
 		tf::pointTFToMsg(orb_slam.getOrigin(), Cam_Pose.pose.position);
 		tf::quaternionTFToMsg(orb_slam.getRotation(), Cam_Pose.pose.orientation);
 		CamPose_Pub.publish(Cam_Pose);
+
+		// odom.header.stamp = ros::Time::now();
+	 //    odom.header.frame_id = "odom";
+
+	 //    odom_quat.x = Q.x();
+	 //    odom_quat.y = Q.y();
+	 //    odom_quat.w = Q.w();
+	 //    odom_quat.z = Q.z();
+	 
+	 //    //set the position
+	 //    odom.pose.pose.position.x = twc.at<float>(0);
+	 //    odom.pose.pose.position.y = twc.at<float>(1);
+	 //    odom.pose.pose.position.z = twc.at<float>(2);
+	 //    odom.pose.pose.orientation = odom_quat;
+
+	 //    odom_pub.publish(odom);
+
+
 	}
 }

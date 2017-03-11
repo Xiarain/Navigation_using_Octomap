@@ -53,8 +53,8 @@ ${OCTOMAP_INCLUDE_DIRS}/opt/ros/indigo/include
 
 #### MY ####
 include_directories(
-"~/Project/orb-slam_dese/RGBD_ORB_SLAM2_RT/orb_slam_rgbd/g2o_with_orbslam2/"
-"~/Project/orb-slam_dese/RGBD_ORB_SLAM2_RT/orb_slam_rgbd/g2o_with_orbslam2/build"
+"/home/xiarui/catkin_ws/src/Navigation_using_Octomap/g2o_with_orbslam2"
+"/home/xiarui/catkin_ws/src/Navigation_using_Octomap/g2o_with_orbslam2/build"
 )
 #### MY ####
 
@@ -62,7 +62,7 @@ add_definitions( ${PCL_DEFINITIONS} )
 link_directories( ${PCL_LIBRARY_DIRS} )
 
 #### MY ####
-link_directories("~/Project/orb-slam_dese/RGBD_ORB_SLAM2_RT/orb_slam_rgbd/g2o_with_orbslam2/lib" )
+link_directories("/home/xiarui/catkin_ws/src/Navigation_using_Octomap/g2o_with_orbslam2/lib")
 #### MY ####
 
 

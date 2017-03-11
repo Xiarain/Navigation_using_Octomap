@@ -109,16 +109,15 @@ static void pcl_callback(const sensor_msgs::PointCloud2& input)
 	
 	try
 	{
-		tf_listener->lookupTransform("/world", "/camera_rgb_frame", ros::Time(0), transform);
-		kinect_orig = point3d(transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z());
+		tf_listener->lookupTransform("/map", "/odom", ros::Time(0), transform);
+		kinect_orig = point3d(transform.getOrigin().x(), transform.getOrigin().y(), -transform.getOrigin().z());
 	}
 	catch (tf::TransformException &ex) 
 	{
 		ROS_ERROR("%s",ex.what());
 		ros::Duration(1.0).sleep();
     }
-	
-	octomap::point3d pose (0.0f, 0.0f, 0.0f);
+
 	tree.insertPointCloud(octo_cloud, kinect_orig);
 	tree.updateInnerOccupancy();
 	
@@ -134,6 +133,7 @@ static void pcl_callback(const sensor_msgs::PointCloud2& input)
 int main(int argc, char **argv)
 {	
     ros::init(argc, argv, "orb_octomap");
+    
 	octomap::Pointcloud octo_cloud;
 	tf_listener = new tf::TransformListener();
     ros::NodeHandle nh;
@@ -195,7 +195,7 @@ void publishMapAsMarkers(octomap::OcTree& octree)
 	{
 		double size = octree.getNodeSize(i);
 
-		msg.markers[i].header.frame_id = "/world";
+		msg.markers[i].header.frame_id = "/map";
 		msg.markers[i].header.stamp = ros::Time::now();
 		msg.markers[i].ns = "map";
 		msg.markers[i].id = i;
