@@ -1,6 +1,0 @@
-/home/xiarui/catkin_ws/src/Navigation_using_Octomap/ORB_SLAM2_modified/build/CMakeFiles/ORB_SLAM2.dir
-/home/xiarui/catkin_ws/src/Navigation_using_Octomap/ORB_SLAM2_modified/build/CMakeFiles/mono_kitti.dir
-/home/xiarui/catkin_ws/src/Navigation_using_Octomap/ORB_SLAM2_modified/build/CMakeFiles/mono_tum.dir
-/home/xiarui/catkin_ws/src/Navigation_using_Octomap/ORB_SLAM2_modified/build/CMakeFiles/rgbd_cc.dir
-/home/xiarui/catkin_ws/src/Navigation_using_Octomap/ORB_SLAM2_modified/build/CMakeFiles/rgbd_tum.dir
-/home/xiarui/catkin_ws/src/Navigation_using_Octomap/ORB_SLAM2_modified/build/CMakeFiles/stereo_kitti.dir
