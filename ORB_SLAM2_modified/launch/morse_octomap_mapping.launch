@@ -26,12 +26,9 @@
 
     	<param name="occupancy_min_z" value="0.2" />
 		<param name="occupancy_max_z" value="0.8" />
-		<param name="ground_filter/plane_distance" value="1.0"/>
-
-		<remap from="projected_map" to="~projected_map" />
+		#<param name="ground_filter/plane_distance" value="1.0"/>
 
 	</node>
 
 	<node pkg="rviz" type="rviz" name="rviz" />
-<include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
 </launch>
