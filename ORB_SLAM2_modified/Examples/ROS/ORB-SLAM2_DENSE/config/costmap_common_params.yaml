@@ -13,13 +13,16 @@ meter_scoring: true
 footprint: [[-0.21, -0.165], [-0.21, 0.165], [0.21, 0.165], [0.21, -0.165]]
 footprint_padding: 0.1
 
-#plugins:
-#- {name: obstacles_layer, type: "costmap_2d::ObstacleLayer"}
+plugins:
+- {name: obstacles_layer, type: "costmap_2d::ObstacleLayer"}
 #- {name: inflater_layer, type: "costmap_2d::InflationLayer"}
 
 obstacles_layer:
   observation_sources: point_cloud_sensor
-  point_cloud_sensor: {sensor_frame: /map, data_type: PointCloud2, topic: /pclPoint_out, marking: true, clearing: true, min_obstacle_height: 0.15, max_obstacle_height: 1.0}
+  point_cloud_sensor: {sensor_frame: /camera_link, data_type: PointCloud2, topic: /camera/depth_registered/points, marking: true, clearing: true, min_obstacle_height: 0.15, max_obstacle_height: 1.0}
 
 inflater_layer:
   inflation_radius: 0.05
+
+  max_obstacle_height: 2
+  min_obstacle_height: 0.25

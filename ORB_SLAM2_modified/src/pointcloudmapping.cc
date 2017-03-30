@@ -158,5 +158,6 @@ void PointCloudMapping::viewer()
 void PointCloudMapping::public_cloud(pcl::PointCloud< pcl::PointXYZRGBA >& cloud)
 {
 	cloud = pcl_cloud;
+    globalMap->clear();
 }
 

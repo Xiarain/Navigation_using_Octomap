@@ -85,6 +85,9 @@ void Pub_CamPose(cv::Mat &pose)
 		Eigen::Quaterniond Q(rotationMat);
 		Pose_quat[0] = Q.x(); Pose_quat[1] = Q.y();
 		Pose_quat[2] = Q.z(); Pose_quat[3] = Q.w();
+
+		Eigen::Quaterniond Q_Modify(1.4142, 0, 1.4142, 0);
+		Q = Q*Q_Modify.inverse();
 		
 		Pose_trans[0] = twc.at<float>(0);
 		Pose_trans[1] = twc.at<float>(1);
